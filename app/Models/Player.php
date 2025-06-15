@@ -9,12 +9,16 @@ class Player extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'date_of_birth',"status"];
+
+    protected $guarded = [];
 
 
-    // public function teams()
-    // {
-    //     return $this->belongsToMany(Team::class)->withPivot('sort_order')->withTimestamps();
-    // }
+    // protected $fillable = ['name', 'email', 'date_of_birth',"status"];
+
+
+    public function teamPlayer()
+    {
+        return $this->belongsToMany(Team::class, 'team_players')->withPivot('sort_order')->orderBy('sort_order');
+    }
 
 }

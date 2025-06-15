@@ -11,7 +11,24 @@ class PlayerController extends Controller
 {
     public function index()
     {
-        return response()->json(Player::where("status",0)->get());
+
+        $players = Player::where("status", 0)->get();
+        return response()->json($players);
+
+    }
+    public function checkAssigenPlayer()
+    {
+
+        $checkWithTeamPlayers = Player::whereHas("teamPlayer")->get();
+        if ($checkWithTeamPlayers->count() > 0) {
+            $players = Player::where("status", 0)->get();
+            return response()->json($players);
+        } else {
+            $players = Player::get();
+            Player::query()->update(['status' => 0]);
+            return response()->json($players);
+        }
+
     }
     public function deletePlayerFromTeam(Request $request, $playerId)
     {
@@ -21,7 +38,7 @@ class PlayerController extends Controller
         $player = Player::find($playerId);
 
         if ($team && $player) {
-            $player->update(["status" =>0]);
+            $player->update(["status" => 0]);
             $team->players()->detach($playerId);
 
             return response()->json(['message' => 'Player successfully removed from team'], 200);
@@ -29,22 +46,7 @@ class PlayerController extends Controller
 
         return response()->json(['message' => 'Player or team not found'], 404);
     }
-    // public function removePlayerFromTeam(Request $request, $playerId)
-    // {
-    //     $data = $request->all();
-    //     $teamId = $data['team_id'];
 
-    //     $player = Player::find($playerId);
-    //     $team = Team::find($teamId);
-
-    //     if ($player && $team) {
-    //         $player->update(["status" =>0]);
-    //         $team->players()->detach($playerId);
-    //         return response()->json(['message' => 'Player removed from team'], 200);
-    //     }
-
-    //     return response()->json(['message' => 'Player or team not found'], 404);
-    // }
     public function updatePlayerTeam(Request $request, $playerId)
     {
         $data = $request->all();
@@ -68,9 +70,10 @@ class PlayerController extends Controller
         return response()->json(['message' => 'Player or team not found'], 404);
     }
 
-    public function updatePlayerStatus(Request $request,$id) {
+    public function updatePlayerStatus(Request $request, $id)
+    {
         $player = Player::find($id);
-        $player->update(["status" =>1]);
+        $player->update(["status" => 1]);
         return response()->json(['message' => 'Player updated'], 200);
     }
 }

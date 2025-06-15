@@ -11,6 +11,7 @@ use App\Http\Controllers\PlayerController;
 
 Route::get('/teams', [TeamController::class, 'index']);
 Route::get('/players', [PlayerController::class, 'index']);
+Route::get('/check-assigen-player', [PlayerController::class, 'checkAssigenPlayer']);
 Route::get('/update-player', [PlayerController::class, 'updatePlayerTeam']);
 Route::get('/update-player-status/{id}', [PlayerController::class, 'updatePlayerStatus']);
 Route::get('/delete-player', [PlayerController::class, 'deletePlayer']);

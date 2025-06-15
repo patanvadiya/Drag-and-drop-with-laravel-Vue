@@ -33,6 +33,8 @@ class TeamController extends Controller
                 $team = Team::find($val['team_id']);
                 foreach ($val['players'] as $playerData) {
                     $team->players()->attach($playerData['id'], ['sort_order' => $playerData['sort_order']]);
+                    $player = Player::find($playerData['id']);
+                    $player->update(["permanent_status" =>1]);
                 }
             }
         }

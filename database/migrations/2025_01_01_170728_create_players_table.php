@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('date_of_birth');
             $table->string('status')->default(0);
+            $table->string('permanent_status')->default(0);
             $table->timestamps();
         });
     }
